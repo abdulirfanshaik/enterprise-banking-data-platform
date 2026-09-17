@@ -1,0 +1,17 @@
+name: ci
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m compileall -q src streaming spark_jobs airflow tests
+      - run: PYTHONPATH=src python -m unittest discover -s tests -v
+      - run: PYTHONPATH=src python -m banking_platform.generator --output /tmp/banking-raw --customers 40 --accounts 60 --transactions 300
+      - run: PYTHONPATH=src python -m banking_platform.local_pipeline --input /tmp/banking-raw --output /tmp/banking-processed

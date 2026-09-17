@@ -1,0 +1,17 @@
+stages: [validate, test]
+
+default:
+  image: python:3.12-slim
+
+syntax:
+  stage: validate
+  script:
+    - python -m compileall -q src streaming spark_jobs airflow tests
+
+unit-and-integration:
+  stage: test
+  script:
+    - PYTHONPATH=src python -m unittest discover -s tests -v
+    - PYTHONPATH=src python -m banking_platform.generator --output /tmp/banking-raw --customers 40 --accounts 60 --transactions 300
+    - PYTHONPATH=src python -m banking_platform.local_pipeline --input /tmp/banking-raw --output /tmp/banking-processed
+    - python -c "import json; r=json.load(open('/tmp/banking-processed/metrics/quality_report.json')); assert r['status']=='PASS'"

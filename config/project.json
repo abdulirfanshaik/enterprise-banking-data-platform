@@ -1,0 +1,16 @@
+{
+  "project_name": "enterprise-banking-data-platform",
+  "currency": "INR",
+  "timezone": "UTC",
+  "quality": {
+    "maximum_reject_rate": 0.03,
+    "maximum_duplicate_rate": 0.05,
+    "maximum_missing_settlement_rate": 0.10
+  },
+  "aml_rules": {
+    "high_value_amount": 200000,
+    "rapid_transfer_window_minutes": 10,
+    "rapid_transfer_count": 5,
+    "round_amount_modulus": 10000
+  }
+}

@@ -1,0 +1,13 @@
+name: banking_analytics
+version: 1.0.0
+config-version: 2
+profile: banking_analytics
+model-paths: ["models"]
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  banking_analytics:
+    staging:
+      +materialized: view
+    marts:
+      +materialized: table
