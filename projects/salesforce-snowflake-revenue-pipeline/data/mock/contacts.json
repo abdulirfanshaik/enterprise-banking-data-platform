@@ -1,0 +1,24 @@
+[
+  {
+    "Id": "003A00000000001",
+    "AccountId": "001A00000000001",
+    "FirstName": "Maya",
+    "LastName": "Chen",
+    "Email": "maya.chen@example.com",
+    "Title": "VP Operations",
+    "CreatedDate": "2025-01-05T12:00:00Z",
+    "LastModifiedDate": "2026-09-20T11:00:00Z",
+    "SystemModstamp": "2026-09-20T11:00:00Z"
+  },
+  {
+    "Id": "003A00000000002",
+    "AccountId": "001A00000000002",
+    "FirstName": "Daniel",
+    "LastName": "Ortiz",
+    "Email": "daniel.ortiz@example.com",
+    "Title": "Director of Data",
+    "CreatedDate": "2025-02-14T10:00:00Z",
+    "LastModifiedDate": "2026-09-22T10:00:00Z",
+    "SystemModstamp": "2026-09-22T10:00:00Z"
+  }
+]

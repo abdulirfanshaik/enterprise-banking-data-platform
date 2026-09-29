@@ -1,0 +1,32 @@
+[
+  {
+    "Id": "001A00000000001",
+    "Name": "Northstar Retail",
+    "Industry": "Retail",
+    "BillingCountry": "United States",
+    "AnnualRevenue": 12500000,
+    "CreatedDate": "2025-01-03T12:00:00Z",
+    "LastModifiedDate": "2026-09-20T10:00:00Z",
+    "SystemModstamp": "2026-09-20T10:00:00Z"
+  },
+  {
+    "Id": "001A00000000002",
+    "Name": "Apex Financial Services",
+    "Industry": "Financial Services",
+    "BillingCountry": "United States",
+    "AnnualRevenue": 28600000,
+    "CreatedDate": "2025-02-10T09:00:00Z",
+    "LastModifiedDate": "2026-09-21T14:30:00Z",
+    "SystemModstamp": "2026-09-21T14:30:00Z"
+  },
+  {
+    "Id": "001A00000000002",
+    "Name": "Apex Financial Services",
+    "Industry": "Financial Services",
+    "BillingCountry": "United States",
+    "AnnualRevenue": 29100000,
+    "CreatedDate": "2025-02-10T09:00:00Z",
+    "LastModifiedDate": "2026-09-22T09:15:00Z",
+    "SystemModstamp": "2026-09-22T09:15:00Z"
+  }
+]
