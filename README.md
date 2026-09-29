@@ -5,6 +5,19 @@ Customer 360, and regulatory-reporting platform. It uses only synthetic data in
 the default demo; it does **not** contain or claim access to JPMorgan Chase,
 Axis Bank, Finacle, RBI, NPCI, or customer-confidential data.
 
+## Featured project: Salesforce → Snowflake Revenue Pipeline
+
+For Senior Data Engineer interviews requiring **SQL, Python, Snowflake,
+Salesforce integration, ETL/ELT, APIs, data quality, Airflow, and end-to-end
+pipeline ownership**, see:
+
+[projects/salesforce-snowflake-revenue-pipeline/](projects/salesforce-snowflake-revenue-pipeline/)
+
+That module includes a synthetic Salesforce-style Account/Contact/Opportunity
+source, Python incremental extraction, Snowflake RAW/STAGING/CURATED SQL,
+deduplication, MERGE logic, Customer 360, reconciliation controls, an Airflow
+DAG, tests, an operations runbook, and an interview walkthrough.
+
 ## What this project demonstrates
 
 - Independent core-banking, UPI, NEFT, RTGS, and card source schemas
@@ -43,9 +56,9 @@ The pipeline creates:
 
 ```text
 data/processed/
-├── bronze/                 # immutable source copies
+├── bronze/
 ├── silver/
-│   ├── payments.csv        # canonical, deduplicated payments
+│   ├── payments.csv
 │   └── rejected_records.csv
 ├── gold/
 │   ├── aml_fraud_alerts.csv
@@ -53,7 +66,7 @@ data/processed/
 │   ├── regulatory_daily.csv
 │   └── settlement_reconciliation.csv
 ├── metrics/quality_report.json
-└── banking_analytics.db    # queryable SQLite warehouse
+└── banking_analytics.db
 ```
 
 ## Useful SQLite queries
