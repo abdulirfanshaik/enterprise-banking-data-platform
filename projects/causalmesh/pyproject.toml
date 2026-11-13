@@ -13,9 +13,12 @@ dependencies = ["fastapi>=0.110,<1", "uvicorn>=0.30,<1"]
 dev = ["pytest>=8,<10", "httpx>=0.27,<1", "ruff>=0.8,<1"]
 stream = ["kafka-python>=2.0,<3"]
 lake = ["duckdb>=1.1,<2"]
+spark = ["pyspark>=4.0,<4.1"]
+spark-test = ["pyspark>=4.0,<4.1", "pytest>=8,<10"]
 
 [project.scripts]
 causalmesh = "causalmesh.cli:main"
+causalmesh-lakehouse = "causalmesh.cloud.job:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

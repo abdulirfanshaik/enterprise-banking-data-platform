@@ -17,3 +17,9 @@ lake:
 	causalmesh export
 stream:
 	docker compose --profile stream up -d redpanda
+
+cloud-test:
+	pytest -q tests/test_cloud_export.py tests/test_cloud_config.py tests/test_cloud_spark.py
+
+cloud-demo:
+	bash scripts/cloud_demo.sh
