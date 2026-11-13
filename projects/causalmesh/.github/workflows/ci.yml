@@ -1,0 +1,25 @@
+name: CausalMesh checks
+on:
+  push:
+    paths:
+      - '**' 
+  pull_request:
+    paths:
+      - '**' 
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.11','3.12','3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install -e '.[dev]'
+      - run: ruff check .
+      - run: pytest -q
+      - run: python -m causalmesh --db /tmp/causalmesh-ci.db demo --transfers 75
+      - run: python -m causalmesh --db /tmp/causalmesh-ci.db audit
+      - run: python -m causalmesh --db /tmp/causalmesh-ci.db replay

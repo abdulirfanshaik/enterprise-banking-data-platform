@@ -1,0 +1,25 @@
+services:
+  # Optional Kafka-compatible broker for local development (not a production cluster).
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v26.2.6
+    command:
+      - redpanda
+      - start
+      - --smp=1
+      - --mode
+      - dev-container
+      - --kafka-addr=internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr=internal://redpanda:9092,external://localhost:19092
+    ports:
+      - "127.0.0.1:19092:19092"
+    profiles: ["stream"]
+  api:
+    build: .
+    environment:
+      CAUSALMESH_DB: /app/data/causalmesh.db
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - causalmesh-data:/app/data
+volumes:
+  causalmesh-data:

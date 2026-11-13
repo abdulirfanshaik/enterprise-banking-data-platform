@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+*.egg-info/
+.coverage
+.DS_Store
+.env
+*.db
+*.db-shm
+*.db-wal
+data/
+*.parquet
+*.log
