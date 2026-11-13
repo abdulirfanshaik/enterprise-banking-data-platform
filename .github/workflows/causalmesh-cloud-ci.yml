@@ -1,0 +1,44 @@
+name: CausalMesh Cloud Spark CI
+on:
+  push:
+    paths:
+      - 'projects/causalmesh/**'
+      - '.github/workflows/causalmesh-cloud-ci.yml'
+  pull_request:
+    paths:
+      - 'projects/causalmesh/**'
+      - '.github/workflows/causalmesh-cloud-ci.yml'
+jobs:
+  spark-lakehouse:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: projects/causalmesh
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Python and Spark dependencies
+        run: python -m pip install -e '.[dev,spark-test]'
+      - name: Syntax and lint
+        run: |
+          python -m compileall -q src tests airflow scripts
+          ruff check .
+      - name: Test portable and real Spark transformations
+        run: pytest -q
+        env:
+          SPARK_LOCAL_HOSTNAME: localhost
+          PYSPARK_PYTHON: python
+          PYSPARK_DRIVER_PYTHON: python
+      - name: Verify independent core and Parquet lakehouse smoke run
+        run: bash scripts/cloud_demo.sh
+        env:
+          SPARK_LOCAL_HOSTNAME: localhost
+          PYSPARK_PYTHON: python
+          PYSPARK_DRIVER_PYTHON: python

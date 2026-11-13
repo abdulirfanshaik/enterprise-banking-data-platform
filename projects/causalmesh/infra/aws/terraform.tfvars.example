@@ -1,0 +1,5 @@
+aws_region                   = "us-east-1"
+environment                  = "dev"
+bucket_name                  = "replace-with-globally-unique-bucket-name"
+databricks_aws_principal_arn = "arn:aws:iam::123456789012:role/replace-with-authorized-principal"
+# Set external ID through TF_VAR_databricks_external_id in a secret manager, NOT this file.

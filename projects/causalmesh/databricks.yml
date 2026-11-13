@@ -1,0 +1,95 @@
+bundle:
+  name: causalmesh-lakehouse
+
+artifacts:
+  causalmesh_wheel:
+    type: whl
+    path: .
+    build: python -m build --wheel
+
+variables:
+  raw_uri:
+    description: "S3 URI of immutable JSONL landing prefix; must be configured"
+  lake_uri:
+    description: "S3 URI of Delta tables under a governed Unity Catalog external location"
+  checkpoint_uri:
+    description: "Durable streaming checkpoint location, distinct from input/output"
+  catalog:
+    description: "Existing governed Unity Catalog name"
+  schema:
+    description: "Existing schema with CREATE TABLE privilege"
+  node_type:
+    description: "AWS Databricks worker node type for target region"
+    default: i3.xlarge
+
+resources:
+  jobs:
+    causalmesh_settlement_batch:
+      name: "[${bundle.target}] causalmesh-settlement-batch"
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: reconcile_financial_events
+          new_cluster:
+            spark_version: 16.4.x-scala2.12
+            node_type_id: ${var.node_type}
+            num_workers: 2
+            data_security_mode: SINGLE_USER
+            spark_conf:
+              spark.sql.session.timeZone: UTC
+          python_wheel_task:
+            package_name: causalmesh_ledger
+            entry_point: causalmesh-lakehouse
+            parameters:
+              - --mode
+              - batch
+              - --input
+              - ${var.raw_uri}
+              - --output
+              - ${var.lake_uri}
+              - --format
+              - delta
+              - --catalog
+              - ${var.catalog}
+              - --schema
+              - ${var.schema}
+          libraries:
+            - whl: ./dist/*.whl
+      email_notifications: {}
+
+    causalmesh_settlement_stream:
+      name: "[${bundle.target}] causalmesh-settlement-stream"
+      max_concurrent_runs: 1
+      tasks:
+        - task_key: incremental_ingest
+          new_cluster:
+            spark_version: 16.4.x-scala2.12
+            node_type_id: ${var.node_type}
+            num_workers: 2
+            data_security_mode: SINGLE_USER
+            spark_conf:
+              spark.sql.session.timeZone: UTC
+          python_wheel_task:
+            package_name: causalmesh_ledger
+            entry_point: causalmesh-lakehouse
+            parameters:
+              - --mode
+              - stream
+              - --input
+              - ${var.raw_uri}
+              - --output
+              - ${var.lake_uri}
+              - --format
+              - delta
+              - --checkpoint
+              - ${var.checkpoint_uri}
+          libraries:
+            - whl: ./dist/*.whl
+
+targets:
+  dev:
+    default: true
+    mode: development
+  prod:
+    mode: production
+    workspace:
+      root_path: /Workspace/Shared/.bundle/${bundle.name}/${bundle.target}

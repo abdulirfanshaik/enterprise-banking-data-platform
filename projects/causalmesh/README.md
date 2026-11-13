@@ -172,3 +172,39 @@ The portable core and HTTP API are covered by automated tests. No AWS/Snowflake/
 > **CausalMesh** — designed and implemented a synthetic financial settlement reliability engine with bitemporal revisions, hash-chain audit proofs, idempotent ingestion, mismatch detection, replay-safe projections, API-based lineage and rollback-only counterfactual simulation. Built a dashboard, developer CLI, automated tests, optional Kafka adapter and Parquet export.
 
 **Status:** portfolio demonstration / locally tested core. **Data:** entirely synthetic. **License:** MIT.
+
+---
+
+## Cloud Lakehouse v2 — AWS + Databricks + PySpark
+
+The original API and SQLite ledger remain independently runnable. An **additional,
+real PySpark path** now transforms verified accepted financial events into bitemporal
+Silver and reconciled Gold with contract quarantine and retry-safe event IDs.
+
+| Layer | Implementation | Execution status |
+|---|---|---|
+| Accepted source | SHA-256 audited ledger export to JSONL | Local bridge tested |
+| PySpark | Schema contract, dedupe, revision guards, `as_of`, settlement marts | Spark CI test workflow |
+| Delta Lake | Bronze MERGE with `foreachBatch` checkpoints, Gold snapshots | Databricks runtime required |
+| Databricks | Declarative Automation Bundle, two wheel Jobs, Unity Catalog registration | Config only until workspace access |
+| AWS | Terraform S3 SSE-S3 + TLS, versioning, public block, IAM role/external ID, Glue, CloudWatch | No `apply` performed |
+| Kafka | Optional Redpanda producer and Spark Kafka source | Optional; not live integration-tested |
+| Airflow | Run-now trigger for existing Databricks job | Requires Airflow provider/connection |
+| Snowflake | SQL serving model and external-stage example | Requires stage/integration and Parquet export |
+| CI/CD | Java 17 + PySpark 4 tests on GitHub Actions | Verifiable in repository Actions |
+
+### Execute local PySpark batch
+
+```bash
+pip install -e '.[dev,spark]'
+causalmesh demo --transfers 50
+python -m causalmesh.cloud.export_cli --db data/causalmesh.db --output data/landing/part-000.jsonl
+python -m causalmesh.cloud.job --input data/landing --output data/lake --format parquet
+```
+
+**Required:** Python 3.11+, Java 17+, and a working PySpark install. The output is a
+portable Parquet batch snapshot; managed Delta Lake and Unity Catalog are separate
+Databricks-only paths. No AWS or Databricks deployment is implied by the repository.
+
+Read the detailed **[Cloud architecture and setup](docs/CLOUD_LAKEHOUSE.md)** and
+**[senior-level interview walkthrough](docs/CLOUD_INTERVIEW.md)**. All data are synthetic.
