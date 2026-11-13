@@ -1,11 +1,9 @@
 """Executed with REAL PySpark in GitHub Actions; skipped without pyspark locally."""
-from datetime import datetime
 
 import pytest
 
 pyspark = pytest.importorskip("pyspark")
 from pyspark.sql import SparkSession  # noqa: E402
-from pyspark.sql import functions as F  # noqa: E402
 
 from causalmesh.cloud.contracts import event_schema  # noqa: E402
 from causalmesh.cloud.pipeline import (  # noqa: E402
